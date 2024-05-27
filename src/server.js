@@ -1,6 +1,6 @@
 import express from 'express';
 import { env } from './utils/env.js';
-import { ENV_VARS } from './constants/constantsApp.js';
+import { ENV_VARS } from './constants/index.js';
 import cors from 'cors';
 import pino from 'pino-http';
 import { errorHandler } from './middleware/errorHandler.js';
