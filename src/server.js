@@ -1,26 +1,17 @@
 import express from 'express';
-import { env } from './utils/env.js';
-import { ENV_VARS } from './constants/index.js';
-import cors from 'cors';
 import pino from 'pino-http';
-import { errorHandler } from './middleware/errorHandler.js';
-import { notFoundHandler } from './middleware/notFoundHandler.js';
-import contactsRouter from './routers/contacts.js';
-
-const PORT = env(ENV_VARS, 3000);
+import cors from 'cors';
+import { ENV_VARS } from './constants/index.js';
+import { env } from './utils/env.js';
+import { getAllContacts, getContactById } from './services/contacts.js';
+import { notFoundMiddleware } from './middlewares/notFoundMiddleware.js';
+import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware.js';
 
 export const setupServer = () => {
   const app = express();
 
-  app.use(
-    express.json({
-      type: ['application/json', 'application/vnd.api+json'],
-      limit: '250kb',
-    }),
-  );
-
+  app.use(express.json());
   app.use(cors());
-
   app.use(
     pino({
       transport: {
@@ -29,18 +20,46 @@ export const setupServer = () => {
     }),
   );
 
-  app.get('/', (req, res) => {
-    res.json({
-      message: 'Contact App is Running',
-    });
+  app.get('/contacts', async (req, res) => {
+    try {
+      const contacts = await getAllContacts();
+      res.json({
+        status: 200,
+        message: 'Successfully found contacts!',
+        data: contacts,
+      });
+    } catch (error) {
+      next(error);
+    }
   });
 
-  app.use(contactsRouter);
+  app.get('/contacts/:contactId', async (req, res) => {
+    try {
+      const contactId = req.params.contactId;
+      const contact = await getContactById(contactId);
 
-  app.use('*', notFoundHandler);
-  app.use(errorHandler);
+      if (!contact) {
+        return res.status(404).json({
+          status: 404,
+          message: `Contact with id ${contactId} not found!`,
+        });
+      }
 
+      res.json({
+        status: 200,
+        message: `Successfully found contact with id ${contactId}!`,
+        data: contact,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.use('*', notFoundMiddleware);
+  app.use(errorHandlerMiddleware);
+
+  const PORT = env(ENV_VARS.PORT, 3000);
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}!`);
   });
 };
