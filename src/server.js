@@ -1,24 +1,15 @@
 import express from 'express';
-import { env } from './utils/env.js';
-import { ENV_VARS } from './constants/index.js';
 import cors from 'cors';
 import pino from 'pino-http';
-import { errorHandler } from './middleware/errorHandler.js';
-import { notFoundHandler } from './middleware/notFoundHandler.js';
+
 import contactsRouter from './routers/contacts.js';
-
-const PORT = env(ENV_VARS, 3000);
-
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { env } from './utils/env.js';
+const PORT = Number(env('PORT', '3000'));
 export const setupServer = () => {
   const app = express();
-
-  app.use(
-    express.json({
-      type: ['application/json', 'application/vnd.api+json'],
-      limit: '250kb',
-    }),
-  );
-
+  app.use(express.json());
   app.use(cors());
 
   app.use(
@@ -29,15 +20,10 @@ export const setupServer = () => {
     }),
   );
 
-  app.get('/', (req, res) => {
-    res.json({
-      message: 'Contact App is Running',
-    });
-  });
-
   app.use(contactsRouter);
 
   app.use('*', notFoundHandler);
+
   app.use(errorHandler);
 
   app.listen(PORT, () => {

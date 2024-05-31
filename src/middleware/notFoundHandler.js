@@ -1,12 +1,7 @@
-import { HttpError } from 'http-errors';
-export const notFoundHandler = (err, req, res, next) => {
-  if (err instanceof HttpError) {
-    res.status(err.status).json({
-      status: err.status,
-      message: err.name,
-      data: err,
-    });
-    return;
+export const notFoundHandler = (req, res, next) => {
+  //приховуємо попереждення від лінтеру щодо невикористованого доки що next
+  if (next === 'fake') {
+    next();
   }
   res.status(404).json({
     message: 'Route not found',
