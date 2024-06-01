@@ -1,6 +1,7 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
+import mongoose from 'mongoose'; // Add mongoose import
 import { ENV_VARS } from './constants/index.js';
 import { env } from './utils/env.js';
 import { getAllContacts, getContactById } from './services/contacts.js';
@@ -20,7 +21,7 @@ export const setupServer = () => {
     }),
   );
 
-  app.get('/contacts', async (req, res) => {
+  app.get('/contacts', async (req, res, next) => {
     try {
       const contacts = await getAllContacts();
       res.json({
@@ -33,9 +34,18 @@ export const setupServer = () => {
     }
   });
 
-  app.get('/contacts/:contactId', async (req, res) => {
+  app.get('/contacts/:contactId', async (req, res, next) => {
     try {
       const contactId = req.params.contactId;
+
+      // Validate the contactId using isObjectIdOrHexString
+      if (!mongoose.isObjectIdOrHexString(contactId)) {
+        return res.status(502).json({
+          status: 502,
+          message: 'Invalid ObjectId format!',
+        });
+      }
+
       const contact = await getContactById(contactId);
 
       if (!contact) {
@@ -45,27 +55,6 @@ export const setupServer = () => {
         });
       }
 
-      res.json({
-        status: 200,
-        message: `Successfully found contact with id ${contactId}!`,
-        data: contact,
-      });
-    } catch (err) {
-      next(err);
-    }
-  });
-
-  app.get('/contacts/:contactId', async (req, res) => {
-    try {
-      const contactId = req.params.contactId;
-      const contact = await getContactById(contactId);
-
-      if (!contact) {
-        return res.status(502).json({
-          status: 502,
-          message: `Sorry, server error!`,
-        });
-      }
       res.json({
         status: 200,
         message: `Successfully found contact with id ${contactId}!`,
