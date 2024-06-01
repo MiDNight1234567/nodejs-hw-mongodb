@@ -28,7 +28,7 @@
     "modal": "^1.2.0",
     "modules": "^0.4.0",
     "mongodb": "^6.6.2",
-    "mongoose": "^8.4.0",
+    "mongoose": "^8.4.1",
     "pino-http": "^10.1.0"
   }
 }
