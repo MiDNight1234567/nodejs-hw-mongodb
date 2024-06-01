@@ -7,6 +7,7 @@ import { env } from './utils/env.js';
 import { getAllContacts, getContactById } from './services/contacts.js';
 import { notFoundMiddleware } from './middlewares/notFoundMiddleware.js';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware.js';
+import { isValidId } from './middlewares/isValidId.js'; // Import your custom middleware
 
 export const setupServer = () => {
   const app = express();
@@ -34,18 +35,10 @@ export const setupServer = () => {
     }
   });
 
-  app.get('/contacts/:contactId', async (req, res, next) => {
+  // Use the isValidId middleware before the main route handler
+  app.get('/contacts/:contactId', isValidId, async (req, res, next) => {
     try {
       const contactId = req.params.contactId;
-
-      // Validate the contactId using isObjectIdOrHexString
-      if (!mongoose.isObjectIdOrHexString(contactId)) {
-        return res.status(502).json({
-          status: 502,
-          message: 'Invalid ObjectId format!',
-        });
-      }
-
       const contact = await getContactById(contactId);
 
       if (!contact) {
