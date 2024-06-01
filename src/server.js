@@ -51,7 +51,7 @@ export const setupServer = () => {
       const contact = await getContactById(contactId);
 
       if (!contact) {
-        return res.status(404).json({
+        return res.status(502).json({
           status: 502,
           message: `Sorry, server error!`,
         });
