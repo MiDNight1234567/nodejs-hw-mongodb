@@ -6,7 +6,7 @@ import {
   refreshUserSessionController,
 } from '../controllers/auth.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { validateBody } from '../middleware/validateBody.js';
+import { validateBody } from '../middlewares/validateBody.js';
 import { loginUserSchema, registerUserSchema } from '../validation/auth.js';
 
 const router = Router();

@@ -4,7 +4,7 @@ import {
   refreshUsersSession,
   registerUser,
 } from '../services/auth.js';
-import { THIRTY_DAYS } from '../constants/constantsApp.js';
+import { THIRTY_DAYS } from '../constants/index.js';
 import createHttpError from 'http-errors';
 
 export const registerUserController = async (req, res) => {

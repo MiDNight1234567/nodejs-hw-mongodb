@@ -1,10 +1,10 @@
 import express from 'express';
 import { env } from './utils/env.js';
-import { ENV_VARS } from './constants/constantsApp.js';
+import { ENV_VARS } from './constants/index.js';
 import cors from 'cors';
 import pino from 'pino-http';
-import { errorHandler } from './middleware/errorHandler.js';
-import { notFoundHandler } from './middleware/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import router from './routers/index.js';
 import cookieParser from 'cookie-parser';
 
