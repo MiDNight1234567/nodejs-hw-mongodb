@@ -20,9 +20,7 @@ export const registerUser = async (payload) => {
   const userWithoutPassword = { ...createdUser._doc }; // Assuming Mongoose is used
   delete userWithoutPassword.password;
 
-  return {
-    userWithoutPassword,
-  };
+  return;
 };
 
 export const loginUser = async (payload) => {
