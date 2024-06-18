@@ -21,7 +21,7 @@ export const registerUser = async (payload) => {
   delete userWithoutPassword.password;
 
   return {
-    massage: userWithoutPassword,
+    userWithoutPassword,
   };
 };
 
