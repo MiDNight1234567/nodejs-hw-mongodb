@@ -53,8 +53,8 @@ export const createContactController = async (req, res) => {
   const body = req.body;
   const newContact = await createContact(body, userId);
 
-  res.status(209).json({
-    status: 209,
+  res.status(201).json({
+    status: 201,
     message: 'Successfully registered a user!',
     data: newContact,
   });
@@ -77,7 +77,7 @@ export const upsertContactController = async (req, res, next) => {
     next(createHttpError(404, 'Contact not found'));
     return;
   }
-  const status = updatedContact.isNew ? 201 : 200;
+  const status = updatedContact.isNew ? 200 : 201;
   res.status(status).json({
     status: status,
     message: `Successfully upserted a contact!`,
