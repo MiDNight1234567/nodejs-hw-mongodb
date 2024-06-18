@@ -20,11 +20,9 @@ export const registerUser = async (payload) => {
   const userWithoutPassword = { ...createdUser._doc }; // Assuming Mongoose is used
   delete userWithoutPassword.password;
 
-  // return {
-  //   status: 201,
-  //   message: 'Successfully registered a user!',
-  //   data: userWithoutPassword,
-  // };
+  return {
+    data: userWithoutPassword,
+  };
 };
 
 export const loginUser = async (payload) => {
