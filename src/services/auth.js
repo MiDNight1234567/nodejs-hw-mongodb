@@ -21,7 +21,7 @@ export const registerUser = async (payload) => {
   delete userWithoutPassword.password;
 
   // return {
-  //   status: 666,
+  //   status: 201,
   //   message: 'Successfully registered a user!',
   //   data: userWithoutPassword,
   // };
