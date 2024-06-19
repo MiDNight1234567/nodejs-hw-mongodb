@@ -2,7 +2,7 @@ import { randomBytes } from 'crypto';
 import bcrypt from 'bcrypt';
 import { UsersCollection } from '../db/user.js';
 import createHttpError from 'http-errors';
-import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
+import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/constantsApp.js';
 import { SessionsCollection } from '../db/session.js';
 
 export const registerUser = async (payload) => {
@@ -12,17 +12,10 @@ export const registerUser = async (payload) => {
   }
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
 
-  const createdUser = await UsersCollection.create({
+  return await UsersCollection.create({
     ...payload,
     password: encryptedPassword,
   });
-
-  const userWithoutPassword = { ...createdUser._doc }; // Assuming Mongoose is used
-  delete userWithoutPassword.password;
-
-  return {
-    data: userWithoutPassword,
-  };
 };
 
 export const loginUser = async (payload) => {
@@ -30,7 +23,7 @@ export const loginUser = async (payload) => {
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
-  const isEqual = await bcrypt.compare(payload.password, user.password);
+  const isEqual = await bcrypt.compare(payload.password, user.password); // Порівнюємо хеші паролів
 
   if (!isEqual) {
     throw createHttpError(401, 'Unauthorized');
