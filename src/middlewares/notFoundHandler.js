@@ -1,4 +1,5 @@
 import { HttpError } from 'http-errors';
+
 export const notFoundHandler = (err, req, res, next) => {
   if (err instanceof HttpError) {
     res.status(err.status).json({
