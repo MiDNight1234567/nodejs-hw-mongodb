@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Contacts app
+  license:
+    name: Apache 2.0
+    url: <http://www.apache.org/licenses/LICENSE-2.0.html>
+  description: >
+    This is a documentation of contacts app
+tags:
+  - name: Auth
+    description: Operations about auth
+  - name: Contacts
+    description: Operations about contacts
+servers:
+  - url: https://nodejs-hw-mongodb-qggc.onrender.com
+paths:
+  /auth/register:
+    post:
+      $ref: '../swagger/paths/auth/register_post.yaml'
+  /auth/login:
+    post:
+      $ref: '../swagger/paths/auth/login_post.yaml'
+  /auth/refresh:
+    post:
+      $ref: '../swagger/paths/auth/refresh_post.yaml'
+  /auth/send-reset-email:
+    post:
+      $ref: '../swagger/paths/auth/send-reset-email_post.yaml'
+  /auth/reset-pwd:
+    post:
+      $ref: '../swagger/paths/auth/reset-pwd_post.yaml'
+  /auth/logout:
+    post:
+      $ref: '../swagger/paths/auth/logout_post.yaml'
+  /contacts:
+    post:
+      $ref: '../swagger/paths/contacts/post.yaml'
+    get:
+      $ref: ../swagger/paths/contacts/get.yaml
+  /contacts/{contactId}:
+    get:
+      $ref: ../swagger/paths/contacts/{contactId}/get.yaml
+    patch:
+      $ref: ../swagger/paths/contacts/{contactId}/patch.yaml
+    delete:
+      $ref: ../swagger/paths/contacts/{contactId}/delete.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
