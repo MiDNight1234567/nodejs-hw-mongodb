@@ -22,7 +22,7 @@ const parseSortBy = (sortBy) => {
     return sortBy;
   }
 
-  return '_id';
+  return 'name';
 };
 
 export const parseSortParams = (query) => {
